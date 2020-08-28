@@ -1,15 +1,34 @@
+import routes from '../routes';
+
 export const getJoin = (req, res) => {
     res.render("join", { pageTitle: "Join" });
 };
 export const postJoin = (req, res) => {
-    console.log(req.body);
-    res.render('join', { pageTitle: 'Join' })
+    const {
+        body: { name, email, password, password2 }
+    } = req;
+    if (password !== password2) {
+        res.status(400);
+        //나중에 페이지에 에러를 전달하는 방법을 알려준다고 함.
+        res.render('join', { pageTitle: 'Join' })
+    } else {
+        //To Do: Register User
+        //To Do: Log user in 
+        res.redirect(routes.home);
+    }
 };
 
+export const getLogin = (req, res) => res.render('login', { pageTitle: 'Login' });
+export const postLogin = (req, res) => {
+    //To Do: 만약에 로그인에 에러가 있다면, 다시 login화면을 표시해아함.
+    res.redirect(routes.home);
+}
 
+export const logout = (req, res) => {
+    // To Do: Process Log Out
+    res.redirect(routes.home);
+}
 
-export const login = (req, res) => res.render('login', { pageTitle: 'Login' });
-export const logout = (req, res) => res.render('logout', { pageTitle: 'Logout' });
 export const users = (req, res) => res.render('users', { pageTitle: 'Users' });
 export const userDetail = (req, res) => res.render('userDetail', { pageTitle: 'User Detail' });
 export const editPorfile = (req, res) => res.render('editProfile', { pageTitle: 'Edit Profile' });
