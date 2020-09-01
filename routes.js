@@ -18,7 +18,7 @@ const VIDEOS = '/videos';
 const UPLOAD = '/upload';
 const VIDEO_DETAIL = '/:id';
 // 콜론(:)을 쓰면 express가 변하는값으로 인식/ 콜론을 안쓰면 텍스트자체를 인식
-const EDIT_VIDEO = '/:id/edti';
+const EDIT_VIDEO = '/:id/edit';
 const DELETE_VIDEO = '/:id/delete'
 
 const routes = {
@@ -46,8 +46,20 @@ const routes = {
       return VIDEO_DETAIL;
     }
   },
-  editVideo: EDIT_VIDEO,
-  deleteVideo: DELETE_VIDEO
+  editVideo: (id) => {
+    if (id) {
+      return `/videos/${id}/edit`;
+    } else {
+      return EDIT_VIDEO;
+    }
+  },
+  deleteVideo: (id) => {
+    if (id) {
+      return `/videos/${id}/delete`;
+    } else {
+      return DELETE_VIDEO;
+    }
+  }
 };
 
 export default routes;
