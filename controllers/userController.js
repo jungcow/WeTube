@@ -1,9 +1,11 @@
+import passport from 'passport';
 import routes from '../routes';
+import User from '../models/User';
 
 export const getJoin = (req, res) => {
     res.render("join", { pageTitle: "Join" });
 };
-export const postJoin = (req, res) => {
+export const postJoin = async (req, res, next) => {
     const {
         body: { name, email, password, password2 }
     } = req;
@@ -12,17 +14,25 @@ export const postJoin = (req, res) => {
         //나중에 페이지에 에러를 전달하는 방법을 알려준다고 함.
         res.render('join', { pageTitle: 'Join' })
     } else {
-        //To Do: Register User
-        //To Do: Log user in 
-        res.redirect(routes.home);
+        try {
+            const user = await User({
+                name,
+                email
+            });
+            await User.register(user, password);
+            next();
+        } catch (error) {
+            console.log(error);
+            res.redirect(routes.home);
+        }
     }
 };
 
 export const getLogin = (req, res) => res.render('login', { pageTitle: 'Login' });
-export const postLogin = (req, res) => {
-    //To Do: 만약에 로그인에 에러가 있다면, 다시 login화면을 표시해아함.
-    res.redirect(routes.home);
-}
+export const postLogin = passport.authenticate('local', {
+    failureRedirect: routes.login,
+    successRedirect: routes.home
+})
 
 export const logout = (req, res) => {
     // To Do: Process Log Out
